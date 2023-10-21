@@ -169,4 +169,13 @@ public class PlayerController : MonoBehaviourPun
         // update the ui
         GameUI.instance.UpdateGoldText(gold);
     }
+
+    void GiveGun(int hasGun)
+    {
+        Debug.Log("Gun?");
+        if (hasGun > 1)
+        {
+            Debug.Log("I has gun");
+        }
+    }
 }

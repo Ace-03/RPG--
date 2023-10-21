@@ -11,7 +11,8 @@ public class Pickup : MonoBehaviourPun
     public enum PickupType
     { 
         Gold,
-        Health
+        Health,
+        Gun
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -27,7 +28,11 @@ public class Pickup : MonoBehaviourPun
                 player.photonView.RPC("GiveGold", player.photonPlayer, value);
             else if (type == PickupType.Health)
                 player.photonView.RPC("Heal", player.photonPlayer, value);
-
+            else if (type == PickupType.Gun)
+            {
+                Debug.Log("Touched gun");
+                player.photonView.RPC("GiveGun", player.photonPlayer, value);
+            }
             PhotonNetwork.Destroy(gameObject);
         }
     }
