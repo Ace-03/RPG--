@@ -172,6 +172,7 @@ MonoBehaviour:
   attackRange: 1
   playerDetectRate: 0.2
   objectToSpawnOnDeath: GoldPickup
+  bullet: {fileID: 0}
   damage: 5
   attackRate: 0.5
   healthBar: {fileID: 2294549841998514928}

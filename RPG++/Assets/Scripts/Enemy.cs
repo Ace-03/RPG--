@@ -23,6 +23,8 @@ public class Enemy : MonoBehaviourPun
 
     public string objectToSpawnOnDeath;
 
+    public BulletController bullet;
+
     [Header("Attack")]
     public int damage;
     public float attackRate;
@@ -101,7 +103,7 @@ public class Enemy : MonoBehaviourPun
         }
     }
 
-            [PunRPC]
+    [PunRPC]
     public void TakeDamage(int damage)
     {
         curHp -= damage;

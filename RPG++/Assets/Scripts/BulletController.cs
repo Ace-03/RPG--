@@ -5,7 +5,7 @@ using Photon.Pun;
 
 public class BulletController : MonoBehaviourPun
 {
-    private int damage;
+    public int damage;
     private int attackerId;
     private bool isMine;
 
@@ -19,22 +19,24 @@ public class BulletController : MonoBehaviourPun
 
         Destroy(gameObject, 5.0f);
     }
-    void Update()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Tried to shoot enemy");
+
         // calculate the direction
-        Vector3 dir = (this.transform.position);
+        //Vector3 dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
 
         // shoot a raycast in the direction
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + dir, dir);
+        //RaycastHit2D hit = Physics2D.Raycast(transform.position + this.transform.position, this.transform.position);
 
         // did we hit an enemy?
-        if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
+        Debug.Log("Tried to shoot enemy");
+        if (collision.gameObject.name == "Enemy(Clone)")
         {
             Debug.Log("Enemy was shot");
             // get the enemy and damage them
-            Enemy enemy = hit.collider.GetComponent<Enemy>();
+            Enemy enemy = GetComponent<Enemy>();
             enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, damage);
         }
     }
+    
 }
