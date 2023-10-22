@@ -210,6 +210,9 @@ MonoBehaviour:
   curHP: 100
   maxHP: 100
   dead: 0
+  isGun: 0
+  bulletSpeed: 2
+  bulletSpawnPos: {fileID: 5971184055940717021}
   damage: 25
   attackRange: 1
   attackRate: 0.2
@@ -218,6 +221,9 @@ MonoBehaviour:
   sr: {fileID: 6908783369120383454}
   weaponAnim: {fileID: 7752934667268941216}
   headerInfo: {fileID: 6141288679795410922}
+  bulletPrefabsPath: Bullet
+  Axe: {fileID: 6573833872825479798}
+  Gun: {fileID: 4755074115759075965}
 --- !u!1 &1525330854619973770
 GameObject:
   m_ObjectHideFlags: 0

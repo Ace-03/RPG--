@@ -29,10 +29,7 @@ public class Pickup : MonoBehaviourPun
             else if (type == PickupType.Health)
                 player.photonView.RPC("Heal", player.photonPlayer, value);
             else if (type == PickupType.Gun)
-            {
-                Debug.Log("Touched gun");
-                player.photonView.RPC("GiveGun", player.photonPlayer, value);
-            }
+                player.photonView.RPC("GiveGun", player.photonPlayer, true);
             PhotonNetwork.Destroy(gameObject);
         }
     }

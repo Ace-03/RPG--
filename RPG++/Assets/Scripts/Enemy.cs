@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviourPun
                 Vector3 dir = targetPlayer.transform.position - transform.position;
                 rig.velocity = dir.normalized * movespeed;
             }
-            else 
+            else
             {
                 rig.velocity = Vector2.zero;
             }
@@ -101,7 +101,7 @@ public class Enemy : MonoBehaviourPun
         }
     }
 
-    [PunRPC]
+            [PunRPC]
     public void TakeDamage(int damage)
     {
         curHp -= damage;

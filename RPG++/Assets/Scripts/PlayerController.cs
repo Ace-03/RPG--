@@ -15,7 +15,10 @@ public class PlayerController : MonoBehaviourPun
     public int curHP;
     public int maxHP;
     public bool dead;
-    
+    public bool isGun;
+    public float bulletSpeed;
+    public Transform bulletSpawnPos;
+
 
     [Header("Attack")]
     public int damage;
@@ -29,6 +32,12 @@ public class PlayerController : MonoBehaviourPun
     public SpriteRenderer sr;
     public Animator weaponAnim;
     public HeaderInfo headerInfo;
+    public string bulletPrefabsPath;
+
+    [Header("Weapons")]
+    public GameObject Axe;
+    public GameObject Gun;
+    //public GameObject bulletObj;
 
     // local player
     public static PlayerController me;
@@ -87,22 +96,47 @@ public class PlayerController : MonoBehaviourPun
     {
         lastAttackTime = Time.time;
 
-        // calculate the direction
-        Vector3 dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
 
-        // shoot a raycast in the direction
-        RaycastHit2D hit = Physics2D.Raycast(transform.position + dir, dir, attackRange);
-
-        // did we hit an enemy?
-        if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
+        if (!isGun)
         {
-            // get the enemy and damage them
-            Enemy enemy = hit.collider.GetComponent<Enemy>();
-            enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, damage);
-        }
+            // calculate the direction
+            Vector3 dir = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
 
-        // player attack animation
-        weaponAnim.SetTrigger("Attack");
+            // shoot a raycast in the direction
+            RaycastHit2D hit = Physics2D.Raycast(transform.position + dir, dir, attackRange);
+
+            // did we hit an enemy?
+            if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
+            {
+                // get the enemy and damage them
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, damage);
+            }
+
+            // player attack animation
+            weaponAnim.SetTrigger("Attack");
+        }
+        else if (isGun)
+        {
+            this.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.transform.position, Camera.main.transform.right);
+            //Bullet = PhotonNetwork.Instantiate(bulletPrefabsPath, Gun.transform.position, Gun.transform.rotation);
+            //Bullet.transform.forward = dir;
+        }
+    }
+       
+    [PunRPC]
+    void SpawnBullet(Vector3 pos, Vector3 dir)
+    {
+        // spawn and orientate it
+        GameObject bulletObj = PhotonNetwork.Instantiate(bulletPrefabsPath, pos, Quaternion.identity);
+        bulletObj.transform.right = dir;
+
+        // get bullet script
+        BulletController bulletScript = bulletObj.GetComponent<BulletController>();
+
+        //initialize it and set the velocity
+        bulletScript.Initialize(damage, this.id, this.photonView.IsMine);
+        bulletScript.rigB.velocity = dir * bulletSpeed;
     }
 
     [PunRPC]
@@ -170,12 +204,15 @@ public class PlayerController : MonoBehaviourPun
         GameUI.instance.UpdateGoldText(gold);
     }
 
-    void GiveGun(int hasGun)
+    [PunRPC]
+    bool GiveGun(bool hasGun)
     {
-        Debug.Log("Gun?");
-        if (hasGun > 1)
+        if (hasGun)
         {
-            Debug.Log("I has gun");
+            Axe.SetActive(false);
+            Gun.SetActive(true);
+            return isGun = true;
         }
+        return isGun = false;
     }
 }
