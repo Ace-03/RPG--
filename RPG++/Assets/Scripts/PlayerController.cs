@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviourPun
     [HideInInspector]
     public int id;
 
+
     [Header("Info")]
     public float moveSpeed;
     public int gold;
@@ -58,9 +59,8 @@ public class PlayerController : MonoBehaviourPun
             me = this;
         else
             rig.isKinematic = true;
-
-
     }
+    
 
     void Update()
     {
@@ -118,7 +118,12 @@ public class PlayerController : MonoBehaviourPun
         }
         else if (isGun)
         {
-            this.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.transform.position, Camera.main.transform.right);
+
+            Vector2 mouseX = Input.mousePosition.normalized;
+
+                this.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.transform.position, new Vector3(mouseX.x,mouseX.y,0));
+         
+
             //Bullet = PhotonNetwork.Instantiate(bulletPrefabsPath, Gun.transform.position, Gun.transform.rotation);
             //Bullet.transform.forward = dir;
         }

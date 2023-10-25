@@ -211,7 +211,7 @@ MonoBehaviour:
   maxHP: 100
   dead: 0
   isGun: 0
-  bulletSpeed: 2
+  bulletSpeed: 8
   bulletSpawnPos: {fileID: 5971184055940717021}
   damage: 25
   attackRange: 1
