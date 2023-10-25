@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviourPun
         else if (isGun)
         {
 
-            Vector2 mouseX = Input.mousePosition.normalized;
+            Vector2 mouseX = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
 
                 this.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.transform.position, new Vector3(mouseX.x,mouseX.y,0));
          
@@ -190,6 +190,15 @@ public class PlayerController : MonoBehaviourPun
         // update the health bar
         headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHP);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision != null && collision.gameObject.CompareTag("Teleporter"))
+        {
+            Debug.Log("Touched the teleporter");
+        }
+    }
+
 
     [PunRPC]
     void Heal(int amountToHeal)
