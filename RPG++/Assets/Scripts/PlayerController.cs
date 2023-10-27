@@ -18,8 +18,10 @@ public class PlayerController : MonoBehaviourPun
     public bool dead;
     public bool isGun;
     public float bulletSpeed;
+    public float shootRate;
     public Transform bulletSpawnPos;
 
+    private float lastShot;
 
     [Header("Attack")]
     public int damage;
@@ -121,7 +123,11 @@ public class PlayerController : MonoBehaviourPun
 
             Vector2 mouseX = (Input.mousePosition - Camera.main.WorldToScreenPoint(transform.position)).normalized;
 
-                this.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.transform.position, new Vector3(mouseX.x,mouseX.y,0));
+            if (Time.time - lastShot < shootRate)
+                return;
+
+            this.photonView.RPC("SpawnBullet", RpcTarget.All, bulletSpawnPos.transform.position, new Vector3(mouseX.x,mouseX.y,0));
+            lastShot = Time.time;
          
 
             //Bullet = PhotonNetwork.Instantiate(bulletPrefabsPath, Gun.transform.position, Gun.transform.rotation);
@@ -191,13 +197,7 @@ public class PlayerController : MonoBehaviourPun
         headerInfo.photonView.RPC("UpdateHealthBar", RpcTarget.All, curHP);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision != null && collision.gameObject.CompareTag("Teleporter"))
-        {
-            Debug.Log("Touched the teleporter");
-        }
-    }
+    
 
 
     [PunRPC]

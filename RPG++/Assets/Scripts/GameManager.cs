@@ -47,4 +47,26 @@ public class GameManager : MonoBehaviourPun
         // initialize the player
         playerObj.GetComponent<PhotonView>().RPC("Initialize", RpcTarget.All, PhotonNetwork.LocalPlayer);
     }
+
+    public PlayerController GetPlayer(int playerId)
+    {
+        foreach (PlayerController player in players)
+        {
+            if (player != null && player.id == playerId)
+                return player;
+        }
+
+        return null;
+    }
+
+    public PlayerController GetPlayer(GameObject playerObject)
+    {
+        foreach (PlayerController player in players)
+        {
+            if (player != null && player.gameObject == playerObject)
+                return player;
+        }
+
+        return null;
+    }
 }

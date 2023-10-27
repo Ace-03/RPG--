@@ -5,17 +5,27 @@ using Photon.Pun;
 using Photon.Realtime;
 public class Teleport : MonoBehaviourPun
 {
-    
+    [Header("Info")]
+    public Transform teleporterTarget;
+    public float teleportBuffer;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [Header("Components")]
+    public PlayerController player;
 
-    // Update is called once per frame
-    void Update()
+    private float lastTeleport;
+
+
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
+
+
+        if (Time.time - lastTeleport < teleportBuffer)
+            return;
+
+        lastTeleport = Time.time;
+
+        Debug.Log("Player Touched the teleporter");
+        player = GameManager.instance.GetPlayer(collision.gameObject);
+        player.transform.position = teleporterTarget.transform.position - new Vector3(2,0,0);
     }
 }

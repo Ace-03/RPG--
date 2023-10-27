@@ -32,5 +32,4 @@ public class BulletController : MonoBehaviourPun
             enemy.photonView.RPC("TakeDamage", RpcTarget.MasterClient, damage);
         }
     }
-    
 }
